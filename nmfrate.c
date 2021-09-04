@@ -33,7 +33,7 @@
  * Compilation
  * -----------
  * 
- * Compile with nmf.
+ * Compile with libnmf.
  * 
  * May also need to be compiled with the math library -lm
  */

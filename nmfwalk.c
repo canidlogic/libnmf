@@ -21,13 +21,12 @@
  * File format
  * -----------
  * 
- * See the "Noir Music File (NMF) specification" for the format of the
- * input binary file.
+ * See the "NMF_Spec.md" for the format of the input binary file.
  * 
  * Compation
  * ---------
  * 
- * Compile with the nmf library.
+ * Compile with libnmf.
  */
 
 #include <stddef.h>

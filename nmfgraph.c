@@ -98,7 +98,7 @@
  * Compilation
  * -----------
  * 
- * Compile with nmf.
+ * Compile with libnmf.
  * 
  * The math library may also be required with -lm
  */

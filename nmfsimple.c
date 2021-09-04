@@ -19,7 +19,7 @@
  * Compation
  * ---------
  * 
- * Compile with the nmf library.
+ * Compile with libnmf.
  */
 
 #include <stddef.h>

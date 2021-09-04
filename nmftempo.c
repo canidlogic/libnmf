@@ -30,7 +30,7 @@
  * Compilation
  * -----------
  * 
- * Requires nmf and libshastina beta 0.9.2 or compatible.
+ * Requires libnmf and libshastina beta 0.9.2 or compatible.
  * 
  * May also require the math library with -lm
  */

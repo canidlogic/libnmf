@@ -13,7 +13,7 @@
 
 ## <span id="mds1">1. Introduction</span>
 
-The Noir Music Format (NMF) is a binary file format that is designed to store the results of interpreting a Noir notation file.  (See the Noir notation specification for more information about Noir notation.)  While Noir notation is a text format that is designed to be written manually by the user, NMF is designed to be easy to access from computer programs.
+The Noir Music Format (NMF) is a binary file format that is designed to store the results of interpreting a Noir notation file.  While Noir notation is a text format that is designed to be written manually by the user, NMF is designed to be easy to access from computer programs.
 
 The intended architecture is that there is a Noir compilation program that converts Noir notation into binary NMF, and then all other Noir programs use the NMF file, saving them from having to interpret the textual Noir notation.
 

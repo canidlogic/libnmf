@@ -43,13 +43,14 @@ The actual value stored in the baised integer is the raw numeric value subtracte
 
 ## <span id="mds3">3. Quanta</span>
 
-Rhythm and time units are counted in _quanta._  The exact meaning of a quanta varies depending on what _basis_ is used in the NMF file.  There are three kinds of basis values currently supported:
+Rhythm and time units are counted in _quanta._  The exact meaning of a quanta varies depending on what _basis_ is used in the NMF file.  The following basis values are currently supported:
 
 1. 96 quanta equals one quarter note
 2. 44,100 quanta per second
 3. 48,000 quanta per second
+4. Any integer quanta rate from 1 Hz to 1024 Hz
 
-The quarter-note basis has variable-length quantum duration, depending on the specific tempo.  The other two bases have fixed-duration quanta.
+The quarter-note basis has variable-length quantum duration, depending on the specific tempo.  The other quantum bases have fixed-duration quanta.
 
 ## <span id="mds4">4. File header</span>
 
@@ -63,7 +64,7 @@ An NMF file begins with the following header:
 
 The primary signature must be the value 1,928,196,216.  The secondary signature must be the value 1,313,818,926.  If these two signatures are not present with those values, then the file is not an NMF file.
 
-The quantum basis must have one of the following values, which selects a quantum basis described in &sect;3 [Quanta](#mds3).  A value of zero selects 96 quanta per quarter note.  A value of one selects 44,100 quanta per second.  A value of two selects 48,000 quanta per second.
+The quantum basis must have one of the following values, which selects a quantum basis described in &sect;3 [Quanta](#mds3).  A value of zero selects 96 quanta per quarter note.  A value of one selects 44,100 quanta per second.  A value of two selects 48,000 quanta per second.  A value in range [3, 1026] selects a rate in range [1 Hz, 1024 Hz], where the encoded value is two greater than the Hz value.
 
 The section count is the total number of sections in the section table (see &sect;5 [Section table](#mds5)).  The range of the section count is one up to and including 65,535.
 

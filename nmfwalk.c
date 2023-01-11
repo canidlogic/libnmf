@@ -88,6 +88,9 @@ static void report(NMF_DATA *pd, FILE *po) {
   } else if (basis == NMF_BASIS_48000) {
     fprintf(po, "48,000 quanta per second\n");
     
+  } else if ((basis >= NMF_BASIS_IMIN) && (basis <= NMF_BASIS_IMAX)) {
+    fprintf(po, "%d quanta per second\n", (basis - 2));
+    
   } else {
     /* Unrecognized basis */
     abort();

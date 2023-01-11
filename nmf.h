@@ -34,10 +34,15 @@
 
 /*
  * The quantum basis values.
+ * 
+ * Values in range [NMF_BASIS_IMIN, NMF_BASIS_IMAX] encode two greater
+ * than the Hz value of the fixed quantum basis rate.
  */
-#define NMF_BASIS_Q96   (0)   /* 96 quanta in a quarter note */
-#define NMF_BASIS_44100 (1)   /* 44,100 quanta per second */
-#define NMF_BASIS_48000 (2)   /* 48,000 quanta per second */
+#define NMF_BASIS_Q96   (0)     /* 96 quanta in a quarter note */
+#define NMF_BASIS_44100 (1)     /* 44,100 quanta per second */
+#define NMF_BASIS_48000 (2)     /* 48,000 quanta per second */
+#define NMF_BASIS_IMIN  (3)     /* Minimum integer rate range */
+#define NMF_BASIS_IMAX  (1026)  /* Maximum integer rate range */
 
 /*
  * NMF_DATA structure prototype.
@@ -176,7 +181,8 @@ void nmf_free(NMF_DATA *pd);
 /*
  * Return the quantum basis of the parsed data object.
  * 
- * The return value is one of the NMF_BASIS constants.
+ * The return value is one of the NMF_BASIS constants, or it is in the
+ * range [NMF_BASIS_IMIN, NMF_BASIS_IMAX].
  * 
  * Parameters:
  * 
@@ -187,6 +193,27 @@ void nmf_free(NMF_DATA *pd);
  *   the quantum basis
  */
 int nmf_basis(NMF_DATA *pd);
+
+/*
+ * Return the fixed quantum basis of the parsed data object in Hz.
+ * 
+ * The return value is either the Hz value, or it is -1 if a
+ * variable-length quantum is used.
+ * 
+ * A Hz value is returned for all quantum bases except NMF_BASIS_Q96.
+ * 
+ * This is a wrapper around nmf_basis().
+ * 
+ * Parameters:
+ * 
+ *   pd - the parsed data object
+ * 
+ * Return:
+ * 
+ *   the fixed quantum basis rate in Hz, or -1 if there is no fixed
+ *   quantum basis rate
+ */
+int32_t nmf_basis_hz(NMF_DATA *pd);
 
 /*
  * Return the number of sections in the parsed data object.
@@ -347,7 +374,7 @@ int nmf_append(NMF_DATA *pd, const NMF_NOTE *pn);
  * Change the quantum basis of the given data object.
  * 
  * basis is the new basis to set.  It must be one of the NMF_BASIS
- * constant values.
+ * constant values, or be in range [NMF_BASIS_IMIN, NMF_BASIS_IMAX].
  * 
  * None of the time or duration values are changed by this function.
  * This simply changes the quantum basis metadata.
@@ -359,6 +386,26 @@ int nmf_append(NMF_DATA *pd, const NMF_NOTE *pn);
  *   basis - the new quantum basis
  */
 void nmf_rebase(NMF_DATA *pd, int basis);
+
+/*
+ * Change the quantum basis of the given data object to a fixed
+ * frequency in Hz.
+ * 
+ * hz is the new fixed quantum basis to set, in Hz.  It must either be
+ * in range [1, 1024], or it must be 44100 or 48000.
+ * 
+ * None of the time or duration values are changed by this function.
+ * This simply changes the quantum basis metadata.
+ * 
+ * This is a wrapper around nmf_rebase().
+ * 
+ * Parameters:
+ * 
+ *   pd - the data object to modify
+ * 
+ *   hz - the new, fixed quantum basis in Hz
+ */
+void nmf_rebase_hz(NMF_DATA *pd, int32_t hz);
 
 /*
  * Sort all the note events in the given data object.

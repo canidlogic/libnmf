@@ -89,7 +89,8 @@ struct NMF_DATA_TAG {
   /*
    * The quantum basis.
    * 
-   * Must be one of the NMF_BASIS constants.
+   * Must be one of the NMF_BASIS constants, or in the integer range
+   * [NMF_BASIS_IMIN, NMF_BASIS_IMAX].
    */
   int32_t basis;
   
@@ -821,7 +822,9 @@ NMF_DATA *nmf_parse(FILE *pf) {
     pd->basis = nmf_readUint16(pf);
     if ((pd->basis != NMF_BASIS_Q96) &&
         (pd->basis != NMF_BASIS_44100) &&
-        (pd->basis != NMF_BASIS_48000)) {
+        (pd->basis != NMF_BASIS_48000) &&
+        ((pd->basis < NMF_BASIS_IMIN) ||
+          (pd->basis > NMF_BASIS_IMAX))) {
       status = 0;
     }
   }
@@ -1040,6 +1043,24 @@ int nmf_basis(NMF_DATA *pd) {
     abort();
   }
   return (int) pd->basis;
+}
+
+/*
+ * nmf_basis_hz function.
+ */
+int32_t nmf_basis_hz(NMF_DATA *pd) {
+  int32_t retval = 0;
+  retval = nmf_basis(pd);
+  if (retval == NMF_BASIS_44100) {
+    retval = 44100;
+  } else if (retval == NMF_BASIS_48000) {
+    retval = 48000;
+  } else if ((retval >= NMF_BASIS_IMIN) && (retval <= NMF_BASIS_IMAX)) {
+    retval = retval - 2;
+  } else {
+    retval = -1;
+  }
+  return retval;
 }
 
 /*
@@ -1285,12 +1306,30 @@ void nmf_rebase(NMF_DATA *pd, int basis) {
   }
   if ((basis != NMF_BASIS_Q96) &&
       (basis != NMF_BASIS_44100) &&
-      (basis != NMF_BASIS_48000)) {
+      (basis != NMF_BASIS_48000) &&
+      ((basis < NMF_BASIS_IMIN) || (basis > NMF_BASIS_IMAX))) {
     abort();
   }
   
   /* Change the basis */
   pd->basis = (int32_t) basis;
+}
+
+/*
+ * nmf_rebase_hz function.
+ */
+void nmf_rebase_hz(NMF_DATA *pd, int32_t hz) {
+  int basis = 0;
+  if (hz == 48000) {
+    basis = NMF_BASIS_48000;
+  } else if (hz == 44100) {
+    basis = NMF_BASIS_44100;
+  } else if ((hz >= 1) && (hz <= 1024)) {
+    basis = (int) (hz + 2);
+  } else {
+    abort();
+  }
+  nmf_rebase(pd, basis);
 }
 
 /*
